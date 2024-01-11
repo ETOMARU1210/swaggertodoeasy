@@ -22,12 +22,21 @@ public class TodoController {
 	private TodoService todoService;
 	
 	@GetMapping(value="/todos")
-	public List<Todo> getAllItems() {
-		return todoService.allItems();
+	public List<Todo> getAllItems( @RequestParam(required = false) String title, @RequestParam(required=false) String status) {
+		if (title != null && status != null) {
+			return todoService.getTitleStatusAllItems(title, status);
+		}
+		else if (title != null) {
+			return todoService.getTitleAllItems(title);
+		}
+		else if (status != null) {
+			return todoService.getStatusAllItems(status);
+		}
+		return todoService.getAllItems();
 	}
 	
 	@GetMapping(value="/todos/{id}")
-	public Todo getItem(@PathVariable String id) {
+	public Todo getItem(@PathVariable long id) {
 		return todoService.getItem(id);
 	}
 	
@@ -37,22 +46,12 @@ public class TodoController {
 	}
 	
 	@PutMapping(value="/todos/{id}")
-	public void updateItem(@PathVariable String id, @RequestBody Todo todo) {
+	public void updateItem(@PathVariable long id, @RequestBody Todo todo) {
 		todoService.updateItem(id, todo);
 	}
 	
 	@DeleteMapping(value="/todos/{id}")
-	public void updateItem(@PathVariable String id) {
+	public void updateItem(@PathVariable long id) {
 		todoService.deleteItem(id);
-	}
-	
-	@GetMapping(value="/todos/titles")
-	public List<Todo> getTitleItem(@RequestParam("title") String title) {
-		return todoService.titleItem(title);
-	}
-	
-	@GetMapping(value="/todos/statuses")
-	public List<Todo> getstatusItem(@RequestParam("status") String status) {
-		return todoService.statusItem(status);
 	}
 }

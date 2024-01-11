@@ -1,75 +1,53 @@
 package com.swaggertodoeasy.service;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.swaggertodoeasy.entity.Todo;
+import com.swaggertodoeasy.repository.TodoRepository;
 
 @Service
 public class TodoService {
 	
-	private List<Todo> allItems = new ArrayList<Todo>(Arrays.asList(
-			new Todo("1", "タイトル1", "未着手", "詳細1"),
-			new Todo("2", "タイトル2", "未着手", "詳細2"),
-			new Todo("3", "タイトル3", "進行中", "詳細3"),
-			new Todo("4", "タイトル4", "完了", "詳細4"),
-			new Todo("5", "タイトル5", "未着手", "詳細5"),
-			new Todo("6", "タイトル5", "未着手", "詳細5"),
-			new Todo("7", "タイトル5", "未着手", "詳細5"),
-			new Todo("8", "タイトル5", "未着手", "詳細5"),
-			new Todo("9", "タイトル5", "未着手", "詳細5")
-	));
+	@Autowired
+	private TodoRepository todoRepository;
 	
-	public List<Todo> allItems() {
-		return allItems;
+	public List<Todo> getAllItems() {
+		List<Todo> todos = todoRepository.getallTodos();
+		return todos;
 	}
 	
-	public Todo getItem(String id) {
-		for (int i = 0; i < allItems.size(); i++) {
-			if (allItems.get(i).getId().equals(id)) {
-				return allItems.get(i);
-			}
-		}
-		return null;
+	public Todo getItem(long id) {
+		return todoRepository.getTodo(id);
 	}
 	
 	public void addItem(Todo todo) {
-		allItems.add(todo);
+		todoRepository.addItem(todo);
 	}
 	
-	public void updateItem(String id, Todo todo) {
-		for (int i = 0; i < allItems.size(); i++) {
-			if (allItems.get(i).getId().equals(id)) {
-				allItems.set(i, todo);
-			}
-		}
+	public void updateItem(long id, Todo todo) {
+		todoRepository.updateItem(id, todo);
 	}
 	
-	public void deleteItem(String id) {
-		allItems.removeIf(todo -> todo.getId().equals(id) );
+	public void deleteItem(long id) {
+		todoRepository.delete(id);
 	}
-	
-	public List<Todo> titleItem(String title){
-		List<Todo> todos = new ArrayList<>();
-		for (int i = 0; i < allItems.size(); i++) {
-			if (allItems.get(i).getTitle().equals(title)) {
-				 todos.add(allItems.get(i));
-			}
-		}
-		
-		return todos;
+
+	public List<Todo> getTitleStatusAllItems(String title, String status) {
+		return todoRepository.getTitleStatusallTodos(title, status);
 	}
-	
-	public List<Todo> statusItem(String status){
-		List<Todo> todos = new ArrayList<>();
-		for (int i = 0; i < allItems.size(); i++) {
-			if (allItems.get(i).getStatus().equals(status)) {
-				 todos.add(allItems.get(i));
-			}
-		}
-		return todos;
+
+	public List<Todo> getTitleAllItems(String title) {
+		// TODO 自動生成されたメソッド・スタブ
+		return todoRepository.getTitleallTodos(title);
+
+	}
+
+	public List<Todo> getStatusAllItems(String status) {
+		// TODO 自動生成されたメソッド・スタブ
+		return todoRepository.getStatusallTodos(status);
+
 	}
 }

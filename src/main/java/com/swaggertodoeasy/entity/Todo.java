@@ -6,8 +6,8 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class Todo {
-	private String id;
+	private Long id;
 	private String title;
 	private String status;
-	private String details;
+	private String detail;
 }
